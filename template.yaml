@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  LayerStack:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: layer.yaml
+  OrderStack:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: order.yaml
+      Parameters:
+        SharedLayer: !GetAtt LayerStack.Outputs.SharedLayer
+  LogStack:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: log.yaml
+      Parameters:
+        SharedLayer: !GetAtt LayerStack.Outputs.SharedLayer
+Outputs:
+  SharedLayer:
+    Value: !GetAtt LayerStack.Outputs.SharedLayer
